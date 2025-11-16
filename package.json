@@ -1,14 +1,39 @@
 {
   "name": "rtk-map",
   "displayName": "RTK Map Hook Navigator",
-  "description": "RTK Map Hook Navigator - Navigate from RTK Query hooks to endpoint definitions",
+  "description": "Navigate from RTK Query auto-generated hooks to their endpoint definitions with CodeLens and Go to Definition support",
   "version": "0.0.1",
+  "publisher": "enBonnet",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
   ],
+  "keywords": [
+    "rtk",
+    "redux",
+    "query",
+    "typescript",
+    "navigation",
+    "hooks",
+    "codelens",
+    "definition"
+  ],
+  "icon": "assets/rtk-map.png",
+  "galleryBanner": {
+    "color": "#007acc",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enBonnet/rtk-map"
+  },
+  "homepage": "https://github.com/enBonnet/rtk-map",
+  "bugs": {
+    "url": "https://github.com/enBonnet/rtk-map/issues"
+  },
   "activationEvents": [
     "onLanguage:typescript"
   ],
