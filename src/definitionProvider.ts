@@ -30,8 +30,9 @@ export class RTKCodeLensProvider implements vscode.CodeLensProvider {
           braceCount += openBraces - closeBraces;
 
           if (braceCount === 0) {
+            // Look for } = variableName pattern, possibly with content before }
             const assignmentMatch = currentLine.match(
-              /^\s*\}\s*=\s*(\w+)\s*;?\s*$/
+              /\}\s*=\s*(\w+)\s*;?\s*$/
             );
             if (assignmentMatch) {
               destructuringEnd = j;
@@ -44,9 +45,19 @@ export class RTKCodeLensProvider implements vscode.CodeLensProvider {
           const hooks: Array<{ name: string; line: number; column: number }> =
             [];
 
-          for (let k = i + 1; k < destructuringEnd; k++) {
+          // Process all lines from the opening brace to the closing line
+          for (let k = i + 1; k <= destructuringEnd; k++) {
             const currentLine = lines[k];
-            const parts = currentLine.split(',');
+            // For the closing line, only process content before the closing brace
+            let lineToProcess = currentLine;
+            if (k === destructuringEnd) {
+              const braceIndex = currentLine.indexOf('}');
+              if (braceIndex !== -1) {
+                lineToProcess = currentLine.substring(0, braceIndex);
+              }
+            }
+
+            const parts = lineToProcess.split(',');
             for (const part of parts) {
               const trimmed = part.trim();
               if (trimmed && /^\s*use[A-Z]/.test(trimmed)) {
