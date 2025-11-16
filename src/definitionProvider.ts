@@ -14,6 +14,47 @@ export class RTKCodeLensProvider implements vscode.CodeLensProvider {
     const text = document.getText();
     const lines = text.split('\n');
 
+    // First, handle single-line destructuring
+    const singleLinePattern =
+      /^\s*export\s+const\s*\{\s*([^}]+)\s*\}\s*=\s*(\w+)\s*;?\s*$/;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const singleMatch = line.match(singleLinePattern);
+
+      if (singleMatch) {
+        const destructuredItems = singleMatch[1];
+        const sliceName = singleMatch[2];
+
+        // Split by comma and clean up whitespace
+        const hooks = destructuredItems.split(',').map((h) => h.trim());
+
+        for (const hook of hooks) {
+          const endpointName = parseHookNameToEndpoint(hook);
+          if (endpointName) {
+            // Find the position of the hook in the line
+            const hookIndex = line.indexOf(hook);
+            if (hookIndex !== -1) {
+              const position = new vscode.Position(i, hookIndex);
+              const range = new vscode.Range(
+                position,
+                new vscode.Position(i, hookIndex + hook.length)
+              );
+
+              const codeLens = new vscode.CodeLens(range, {
+                title: `→ ${endpointName}`,
+                command: 'rtk-map.navigateToEndpoint',
+                arguments: [document.uri.toString(), endpointName],
+              });
+
+              codeLenses.push(codeLens);
+            }
+          }
+        }
+      }
+    }
+
+    // Then, handle multi-line destructuring
     const exportPattern = /^\s*export\s+const\s*\{\s*$/;
 
     for (let i = 0; i < lines.length; i++) {
