@@ -10,13 +10,11 @@ export function findEndpointDefinition(document: vscode.TextDocument, endpointNa
     const text = document.getText();
     const lines = text.split('\n');
 
-    // Pattern to match endpoint definitions like: fetchOrderGuides: builder.query<...>(
     const endpointPattern = new RegExp(`^\\s*${endpointName}\\s*:\\s*builder\\.(query|mutation)\\s*[<(]`);
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         if (endpointPattern.test(line)) {
-            // Find the start position of the endpoint name
             const nameMatch = line.match(new RegExp(`(\\s*${endpointName}\\s*:)`));
             if (nameMatch) {
                 const startIndex = line.indexOf(nameMatch[1]);

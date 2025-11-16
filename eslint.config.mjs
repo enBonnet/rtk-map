@@ -18,7 +18,7 @@ export default [{
             selector: "import",
             format: ["camelCase", "PascalCase"],
         }],
-
+        "no-console": "error",
         curly: "warn",
         eqeqeq: "warn",
         "no-throw-literal": "warn",
