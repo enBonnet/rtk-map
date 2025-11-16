@@ -9,8 +9,9 @@ When working with Redux Toolkit Query (RTK Query), hooks are automatically gener
 ## Problem Statement
 
 RTK Query automatically generates React hooks from endpoint definitions using a naming convention:
+
 - `builder.query` endpoints → `use[EndpointName]Query`
-- `builder.mutation` endpoints → `use[EndpointName]Mutation`  
+- `builder.mutation` endpoints → `use[EndpointName]Mutation`
 - Lazy queries → `useLazy[EndpointName]Query`
 
 However, TypeScript's native "Go to Definition" doesn't work for these auto-generated hooks because they don't exist as explicit function declarations in your code. This extension solves that problem by implementing custom definition resolution.[10]
@@ -56,28 +57,31 @@ export const cashbackSlice = baseSlice.injectEndpoints({
           return {
             url: `${urlPaths.cashbackRewards}`,
             method: 'GET',
-          }
+          };
         },
         providesTags: ['Cashback', 'Points'],
       }),
-      referral: builder.mutation<ReferralResponse, { linkId: string; email: string }>({
+      referral: builder.mutation<
+        ReferralResponse,
+        { linkId: string; email: string }
+      >({
         query(body) {
           return {
             url: `${urlPaths.referral}/${body.linkId}`,
             method: 'POST',
             body: { email: body.email },
-          }
+          };
         },
         invalidatesTags: ['Points'],
       }),
-    }
+    };
   },
-})
+});
 
 export const {
-  useGetCashbackRewardsQuery,  // ← Ctrl+Click here
-  useReferralMutation,          // ← or here
-} = cashbackSlice
+  useGetCashbackRewardsQuery, // ← Ctrl+Click here
+  useReferralMutation, // ← or here
+} = cashbackSlice;
 ```
 
 ### Navigation Actions
@@ -127,12 +131,14 @@ The extension uses VSCode's `DefinitionProvider` API to implement custom navigat
 ## Use Case for LLMs
 
 This README provides comprehensive context for LLMs to understand:
+
 - The problem this extension solves
 - How RTK Query's hook auto-generation works
 - The technical implementation approach
 - Expected behavior and usage patterns
 
 When using this as context, LLMs can help with:
+
 - Extending the extension to support cross-file navigation
 - Adding support for custom naming conventions
 - Implementing additional features like reverse navigation (endpoint → hooks)
