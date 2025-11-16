@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { RTKCodeLensProvider } from './definitionProvider';
+import { findEndpointDefinition } from './endpointFinder';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -8,18 +10,34 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "rtk-map" is now active!');
+	console.log('RTK Map Hook Navigator is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('rtk-map.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from rtk-map!');
+	// Register the navigation command
+	const navigateCommand = vscode.commands.registerCommand('rtk-map.navigateToEndpoint', async (documentUri: string, endpointName: string) => {
+		const uri = vscode.Uri.parse(documentUri);
+		const document = await vscode.workspace.openTextDocument(uri);
+		const location = findEndpointDefinition(document, endpointName);
+
+		if (location) {
+			await vscode.window.showTextDocument(document);
+			const editor = vscode.window.activeTextEditor;
+			if (editor) {
+				editor.revealRange(location.range, vscode.TextEditorRevealType.InCenter);
+				editor.selection = new vscode.Selection(location.range.start, location.range.end);
+			}
+		} else {
+			vscode.window.showInformationMessage(`RTK Map: Could not find endpoint "${endpointName}"`);
+		}
 	});
 
-	context.subscriptions.push(disposable);
+	// Register the CodeLens provider for TypeScript files
+	const provider = new RTKCodeLensProvider();
+	const codeLensDisposable = vscode.languages.registerCodeLensProvider(
+		{ language: 'typescript' },
+		provider
+	);
+
+	context.subscriptions.push(navigateCommand, codeLensDisposable);
 }
 
 // This method is called when your extension is deactivated
