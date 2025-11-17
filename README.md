@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/"><img src="https://img.shields.io/badge/VSCode-Extension-blue.svg" alt="VSCode Extension"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=enbonnet.rtk-map"><img src="https://img.shields.io/visual-studio-marketplace/v/enbonnet.rtk-map" alt="Visual Studio Marketplace"></a>
+  <a href="https://open-vsx.org/extension/enBonnet/rtk-map"><img src="https://img.shields.io/open-vsx/v/enBonnet/rtk-map" alt="Open VSX"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" alt="TypeScript"></a>
   <a href="https://redux-toolkit.js.org/rtk-query/overview"><img src="https://img.shields.io/badge/Redux%20Toolkit%20Query-764ABC?logo=redux&logoColor=white" alt="Redux Toolkit Query"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
